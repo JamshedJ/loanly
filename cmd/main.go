@@ -28,7 +28,7 @@ func main() {
 
 	repos := repository.NewRepository(db)
 	services := service.NewService(*repos)
-	handlers := handler.NewHandler(*services)
+	handlers := handler.NewHandler(services)
 
 	srv := new(restapi.Server)
 	go func()  {

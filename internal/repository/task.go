@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"context"
+
 	"github.com/JamshedJ/REST-api/internal/models"
 	"gorm.io/gorm"
 )
@@ -15,8 +17,14 @@ func NewRepository(db *gorm.DB) *Repository {
 	}
 }
 
-func (r *Repository) CreateTask(userID int, params models.TaskParams) (id int, err error) {
-	return 
+func (r *Repository) CreateTask(ctx context.Context, userID int, params models.TaskParams) (task *models.Task, err error) {
+	task = &models.Task{
+		Title: &params.Title,
+		Description: &params.Description,
+	}
+
+	err = r.db.WithContext(ctx).Create(&task).Error
+	return
 }
 
 func (r *Repository) GetTaskByID(userID int, taskID int) (task models.Task, err error) {

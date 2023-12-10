@@ -1,6 +1,8 @@
 package service
 
 import (
+	"context"
+
 	"github.com/JamshedJ/REST-api/internal/models"
 	"github.com/JamshedJ/REST-api/internal/repository"
 )
@@ -15,8 +17,8 @@ func NewTaskService(repo repository.Repository) *TaskService {
 	}
 }
 
-func (s *TaskService) CreateTask(userID int, params models.TaskParams) (id int, err error) {
-	return s.repo.CreateTask(userID, params)
+func (s *TaskService) CreateTask(ctx context.Context, userID int, params models.TaskParams) (task *models.Task, err error) {
+	return s.repo.CreateTask(ctx, userID, params)
 }
 
 func (s *TaskService) GetTaskByID(userID int, taskID int) (task models.Task, err error) {
