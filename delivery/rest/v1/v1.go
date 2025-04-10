@@ -1,13 +1,14 @@
 package v1
 
 import (
+	"github.com/JamshedJ/loanly/domain/services"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 )
 
 type ApiV1 struct {
 	Logger zerolog.Logger
-	// Svc service.ServiceFacade
+	Svc    services.ServiceFacade
 }
 
 func CORS() gin.HandlerFunc {
@@ -31,7 +32,10 @@ func (api *ApiV1) RegisterRoutes() *gin.Engine {
 
 	v1 := e.Group("/v1")
 	{
-		_ = v1
+		lp := v1.Group("/loanproduct")
+		{
+			lp.POST("", api.CreateLoanProduct)
+		}
 	}
 
 	return e

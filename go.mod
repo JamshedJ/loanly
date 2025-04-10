@@ -5,6 +5,7 @@ go 1.22.4
 require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/rs/zerolog v1.31.0
+	github.com/shopspring/decimal v1.4.0
 	go.opentelemetry.io/otel/trace v1.21.0
 )
 
