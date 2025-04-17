@@ -42,7 +42,6 @@ func LPBuilder(in CreateLoanProductIn) (entities.LoanProduct, error) {
 	}
 
 	lpTypes := []entities.LoanProductType{
-		entities.LoanProductTypeBNPL,
 		entities.LoanProductTypePayday,
 		entities.LoanProductTypeInstallment,
 	}
@@ -53,24 +52,6 @@ func LPBuilder(in CreateLoanProductIn) (entities.LoanProduct, error) {
 
 	for _, lptype := range lpTypes {
 		switch lptype {
-		case entities.LoanProductTypeBNPL:
-			lp = entities.LoanProduct{
-				Name:            in.Name,
-				Type:            lptype,
-				MinAmount:       in.MinAmount,
-				MaxAmount:       in.MaxAmount,
-				Currency:        entities.Currency(in.Currency),
-				MinTermDays:     minTermD,
-				MaxTermDays:     maxTermD,
-				MinInterestRate: in.MinInterestRate,
-				MaxInterestRate: in.MaxInterestRate,
-				// TODO: Написать формулу расчета LateFee
-				LateFee:              decimal.NewFromFloat(0.5), // 0.5 TJS в день
-				InstallmentFrequency: entities.InstallmentFrequencyMonthly,
-				SinglePayment:        false,
-				Installments:         []int{1, 3, 6, 12, 24},
-			}
-			return lp, nil
 		case entities.LoanProductTypePayday:
 			lp = entities.LoanProduct{
 				Name:                 in.Name,
@@ -82,6 +63,7 @@ func LPBuilder(in CreateLoanProductIn) (entities.LoanProduct, error) {
 				MaxTermDays:          maxTermD,
 				MinInterestRate:      in.MinInterestRate,
 				MaxInterestRate:      in.MaxInterestRate,
+				// TODO: Написать формулу расчета LateFee
 				LateFee:              decimal.NewFromFloat(0.50), // 0.5 TJS в день (каждый день будет начисляться штраф 0.5 TJS до полного погашения)
 				InstallmentFrequency: entities.InstallmentFrequencyMonthly,
 				SinglePayment:        true,

@@ -22,7 +22,6 @@ type LoanProduct struct {
 type LoanProductType string
 
 const (
-	LoanProductTypeBNPL        LoanProductType = "bnpl"        // Buy Now Pay Later - расрочка
 	LoanProductTypePayday      LoanProductType = "payday"      // Кредит до зарплаты
 	LoanProductTypeInstallment LoanProductType = "installment" // Классический кредит
 )

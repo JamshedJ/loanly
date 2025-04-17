@@ -27,7 +27,7 @@ func (api *ApiV1) CreateLoanProduct(c *gin.Context) {
 		return
 	}
 
-	lpId, err := api.Svc.LoanProduct.Create(c, services.CreateLoanProductIn{
+	lpID, err := api.Svc.LoanProduct.Create(c, services.CreateLoanProductIn{
 		Name:            in.Name,
 		Type:            in.Type,
 		MinAmount:       in.MinAmount,
@@ -44,5 +44,5 @@ func (api *ApiV1) CreateLoanProduct(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{"loan_product_id": lpId})
+	c.JSON(200, gin.H{"loan_product_id": lpID})
 }
