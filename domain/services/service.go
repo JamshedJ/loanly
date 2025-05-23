@@ -5,5 +5,5 @@ import (
 )
 
 type LoanProductServiceI interface {
-	Create(ctx context.Context, in CreateLoanProductIn) (uint, error)
+	Create(ctx context.Context, in CreateLoanProductIn) error
 }

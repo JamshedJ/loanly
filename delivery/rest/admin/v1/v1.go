@@ -6,7 +6,7 @@ import (
 	"github.com/rs/zerolog"
 )
 
-type ApiV1 struct {
+type AdminApiV1 struct {
 	Logger zerolog.Logger
 	Svc    services.ServiceFacade
 }
@@ -24,12 +24,12 @@ func CORS() gin.HandlerFunc {
 	}
 }
 
-func (api *ApiV1) RegisterRoutes() *gin.Engine {
+func (api *AdminApiV1) RegisterRoutes() *gin.Engine {
 	e := gin.New()
 	e.Use(gin.Recovery())
 	e.Use(CORS())
 
-	v1 := e.Group("/v1")
+	v1 := e.Group("admin/v1")
 	{
 		lp := v1.Group("/loanproduct")
 		{

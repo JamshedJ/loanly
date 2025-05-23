@@ -3,31 +3,48 @@ package services
 import (
 	"context"
 
-	"github.com/JamshedJ/loanly/domain/repository"
+	"github.com/JamshedJ/loanly/domain/provider"
 	"github.com/rs/zerolog"
+	"github.com/shopspring/decimal"
 )
 
 type LoanProductService struct {
-	Logger          zerolog.Logger
-	LoanProductRepo repository.LoanProductRepositoryI
+	Logger       zerolog.Logger
+	LoanProvider provider.LoanProviderI
 }
 
 var _ LoanProductServiceI = (*LoanProductService)(nil)
 
-func (s *LoanProductService) Create(ctx context.Context, in CreateLoanProductIn) (uint, error) {
+type CreateLoanProductIn struct {
+	Name            string
+	Type            string
+	MinAmount       decimal.Decimal
+	MaxAmount       decimal.Decimal
+	Currency        string
+	MinTermDays     int
+	MaxTermDays     int
+	MinInterestRate decimal.Decimal
+	MaxInterestRate decimal.Decimal
+}
+
+func (i *CreateLoanProductIn) Validate() error {
+	// TODO: Валидация параметров
+	return nil
+}
+
+func (s *LoanProductService) Create(ctx context.Context, in CreateLoanProductIn) error {
 	logger := s.Logger.With().Ctx(ctx).Str("handler", "CreateLoanProduct").Logger()
 
-	buildedLP, err := LPBuilder(in)
-	if err != nil {
-		logger.Error().Err(err).Msg("Failed to build loan product")
-		return 0, err
+	if err := in.Validate(); err != nil {
+		logger.Error().Err(err).Msg("Failed to validate loan product params")
+		return err
 	}
 
-	lpId, err := s.LoanProductRepo.Create(ctx, buildedLP)
+	err := s.LoanProvider.CreateLoanProduct(ctx, provider.CreateLoanProductIn{})
 	if err != nil {
-		logger.Error().Err(err).Msg("Failed create loan product")
-		return 0, err
+		logger.Error().Err(err).Msg("Failed to create loan product")
+		return err
 	}
 
-	return lpId, nil
+	return nil
 }
