@@ -5,8 +5,10 @@ import (
 	"os"
 
 	"github.com/JamshedJ/loanly/config"
-	v1 "github.com/JamshedJ/loanly/delivery/rest/admin/v1"
+	adminV1 "github.com/JamshedJ/loanly/delivery/rest/admin/v1"
+	loanV1 "github.com/JamshedJ/loanly/delivery/rest/loan/v1"
 	"github.com/JamshedJ/loanly/domain/services"
+	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 )
 
@@ -17,10 +19,27 @@ func main() {
 
 	svc := services.ServiceFacade{}
 
-	adminApi := v1.AdminApiV1{
-		Logger: logger,
+	adminApi := adminV1.AdminApiV1{
+		Logger: logger.With().Str("component", "admin_api_v1").Logger(),
 		Svc:    svc,
 	}
 
-	adminApi.RegisterRoutes().Run(fmt.Sprintf(":%d", cfg.App.Port))
+	loanApi := loanV1.LoanApiV1{
+		Logger: logger.With().Str("component", "loan_api_v1").Logger(),
+		Svc:    svc,
+	}
+
+	api := gin.New()
+
+	err := adminApi.RegisterRoutes(api)
+	if err != nil {
+		logger.Fatal().Err(err).Msg("failed to register admin api routes")
+	}
+
+	err = loanApi.RegisterRoutes(api)
+	if err != nil {
+		logger.Fatal().Err(err).Msg("failed to register loan api routes")
+	}
+
+	api.Run(fmt.Sprintf(":%d", cfg.App.Port))
 }

@@ -24,8 +24,7 @@ func CORS() gin.HandlerFunc {
 	}
 }
 
-func (api *AdminApiV1) RegisterRoutes() *gin.Engine {
-	e := gin.New()
+func (api *AdminApiV1) RegisterRoutes(e *gin.Engine) error {
 	e.Use(gin.Recovery())
 	e.Use(CORS())
 
@@ -37,5 +36,5 @@ func (api *AdminApiV1) RegisterRoutes() *gin.Engine {
 		}
 	}
 
-	return e
+	return nil
 }
